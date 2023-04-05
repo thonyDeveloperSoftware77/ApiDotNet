@@ -32,8 +32,27 @@ namespace Api_con_puntoNet.Controllers
 
         // POST api/<PetShop>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Cliente cliente)
+
         {
+            Cliente clientes2 = Utils.Utils.clientes.Find(x => x.Id == id);
+            if (clientes2 ==null)
+            {
+                Cliente client = new Cliente()
+                {
+                    Id = cliente.Id,
+                    Name = cliente.Name,
+                    email = cliente.email,
+                    phoneNumber = cliente.phoneNumber,
+                };
+                Utils.Utils.clientes.Add(client);
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+         
         }
 
         // PUT api/<PetShop>/5
