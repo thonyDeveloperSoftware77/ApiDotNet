@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api con puntoNet", "Api con puntoNet\Api con puntoNet.csproj", "{5618474D-A0FF-42E9-9886-FC6B20DEB43F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5618474D-A0FF-42E9-9886-FC6B20DEB43F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5618474D-A0FF-42E9-9886-FC6B20DEB43F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5618474D-A0FF-42E9-9886-FC6B20DEB43F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5618474D-A0FF-42E9-9886-FC6B20DEB43F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {61DBF742-04DD-41B0-9FD8-B9BDD1EF8194}
+	EndGlobalSection
+EndGlobal
