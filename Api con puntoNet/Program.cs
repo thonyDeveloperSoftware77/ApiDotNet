@@ -1,8 +1,12 @@
 ﻿using Api_con_puntoNet.Controllers;
+using Api_con_puntoNet.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddDbContext<BrandContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("BrandCs")));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

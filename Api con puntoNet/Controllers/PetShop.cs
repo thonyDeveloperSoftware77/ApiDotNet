@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Api_con_puntoNet.Utils;
 using Microsoft.CodeAnalysis.Editing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,31 +13,54 @@ namespace Api_con_puntoNet.Controllers
     [ApiController]
     public class PetShop : ControllerBase
     {
-       
+        private readonly BrandContext _dbContext;
+        public PetShop(BrandContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
 
 
         // GET: api/<PetShop>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<IEnumerable<Cliente>>> Get()
         {
-          
-             return Ok(Utils.Utils.clientes);
+             if(_dbContext.Clientes == null)
+            {
+                return NotFound();
+            }
+            return await _dbContext.Clientes.ToListAsync();
         }
+         [HttpGet("{id}")]
+       public async Task<ActionResult<Cliente>> Get(int id)
+       {
+           if (_dbContext.Clientes == null)
+           {
+               return NotFound();
+            }
+            var cliente = await _dbContext.Clientes.FindAsync(id);
+            if (cliente ==null)
+            {
+               return NotFound();
+
+            }
+            return cliente;
+       }
 
         // GET api/<PetShop>/5
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
-        {
-            Cliente clientes = Utils.Utils.clientes.Find(x => x.Id == id);
-            return Ok(clientes);
-        }
+        /* [HttpGet("{id}")]
+         public IActionResult Get(int id)
+         {
+             Cliente clientes = Utils.Utils.clientes.Find(x => x.Id == id);
+             return Ok(clientes);
+         }*/
 
         // POST api/<PetShop>
-        [HttpPost]
+        /**[HttpPost]
         public IActionResult Post([FromBody] Cliente cliente)
 
         {
-            Cliente clientes2 = Utils.Utils.clientes.Find(x => x.Id == id);
+            Cliente clientes2 = Utils.Utils.clientes.Find(x => x.Id == cliente.Id);
             if (clientes2 ==null)
             {
                 Cliente client = new Cliente()
@@ -53,18 +78,65 @@ namespace Api_con_puntoNet.Controllers
                 return BadRequest();
             }
          
+        }*/
+        [HttpPost]
+        public async Task<ActionResult<Cliente>> PostCliente(Cliente cliente)
+        {
+            _dbContext.Clientes.Add(cliente);
+            await _dbContext.SaveChangesAsync();
+            return CreatedAtAction(nameof(Get), new { id = cliente.Id }, cliente);
         }
 
+
+
         // PUT api/<PetShop>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+
+        public async Task<IActionResult> PutCliente(int id, Cliente cliente)
         {
+            if (id != cliente.Id)
+            {
+                return BadRequest();
+            }
+            _dbContext.Entry(cliente).State = EntityState.Modified;
+
+
+            try{
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ClienteAvailable(id)) 
+                    {
+                        return NotFound();
+                    }else{
+                    throw;
+                    }
+            }
+            return Ok();
+                }
+
+        private bool ClienteAvailable(int id)
+        {
+            return (_dbContext.Clientes?.Any(x => x.Id == id)).GetValueOrDefault();
         }
 
         // DELETE api/<PetShop>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> DeleteCliente(int id)
         {
+            if(_dbContext.Clientes == null)
+            {
+                return NotFound();
+            }
+            var cliente = await _dbContext.Clientes.FindAsync(id);
+            if(cliente== null)
+            {
+                return NotFound(id);
+            }
+            _dbContext.Clientes.Remove(cliente);
+            await _dbContext.SaveChangesAsync();
+            return Ok();
         }
     }
 }
